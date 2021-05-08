@@ -902,7 +902,7 @@
                 format: settings.format,
                 padZeroes: true,
                 timeSeparator: settings.separator,
-                expiryUrl: settings.text,
+                expiryUrl: ( elementorFrontend.isEditMode() ) ? '' : settings.text,
                 serverSync: function () {
                     return new Date(settings.serverSync);
                 }
@@ -933,14 +933,17 @@
 
             if (settings.event === "onExpiry") {
                 $countDownElement.find(".premium-countdown-init").html(settings.text);
-            } else if (settings.event === "expiryUrl") {
+            } else if (settings.event === "expiryUrl" && ! elementorFrontend.isEditMode()) {
                 var editMode = $("body").find("#elementor").length;
                 if (editMode > 0) {
                     $countDownElement.find(".premium-countdown-init").html(
                         "<h1>You can not redirect url from elementor Editor!!</h1>");
                 } else {
-                    window.location.href = settings.text;
+                    if (! elementorFrontend.isEditMode() ) {
+                        window.location.href = settings.text;
+                    }
                 }
+
             }
         }
 

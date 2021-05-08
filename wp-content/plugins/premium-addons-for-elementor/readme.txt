@@ -5,7 +5,7 @@ Donate Link: https://premiumaddons.com/?utm_source=wp-repo&utm_medium=link&utm_c
 Requires at least: 5.0
 Tested Up To: 5.7.1
 Requires PHP: 5.4
-Stable Tag: 4.3.2
+Stable Tag: 4.3.3
 License: GPL v3.0
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -190,6 +190,11 @@ Premium Addons for Elementor is 100% Ads Free, Ads can only be detected from You
 14. Premium Progress Bar Widget for Elementor
 
 == Changelog ==
+
+= 4.3.3 =
+
+- Fixed: Hover Border Radius option issue on Safari in Image Scroll widget.
+- Tweak: Select any taxonomy for Filter Tabs option in Blog widget.
 
 = 4.3.2 =
 

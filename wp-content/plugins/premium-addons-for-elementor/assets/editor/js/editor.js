@@ -62,6 +62,7 @@
                 success: function (res) {
                     self.updateFilterOptions(JSON.parse(res.data));
                     self.isUpdated = false;
+
                     self.render();
                 },
                 error: function (err) {
@@ -82,5 +83,60 @@
     });
 
     elementor.addControlView("premium-post-filter", filterOptions);
+
+    var taxOptions = elementor.modules.controls.Select.extend({
+        isUpdated: false,
+        onReady: function () {
+            var self = this,
+                type = self.options.elementSettingsModel.attributes.post_type_filter,
+                options = (0 === this.model.get('options').length);
+
+            if (options) {
+                self.fetchData(type);
+            }
+
+            elementor.channels.editor.on('change', function (view) {
+                var changed = view.elementSettingsModel.changed;
+
+                if (undefined !== changed.post_type_filter && !self.isUpdated) {
+                    self.isUpdated = true;
+                    self.fetchData(changed.post_type_filter);
+                }
+            });
+        },
+        fetchData: function (type) {
+            var self = this;
+            $.ajax({
+                url: PremiumSettings.ajaxurl,
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                    nonce: PremiumSettings.nonce,
+                    action: 'premium_update_tax',
+                    post_type: type
+                },
+                success: function (res) {
+                    var options = JSON.parse(res.data);
+                    self.updateTaxOptions(options);
+                    self.isUpdated = false;
+
+                    if (0 !== options.length) {
+                        var $tax = Object.keys(options);
+                        self.container.settings.setExternalChange({ 'filter_tabs_type': $tax[0] });
+                        self.container.render();
+                        self.render();
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                },
+            });
+        },
+        updateTaxOptions: function (options) {
+            this.model.set("options", options);
+        },
+    });
+
+    elementor.addControlView("premium-tax-filter", taxOptions);
 
 })(jQuery);

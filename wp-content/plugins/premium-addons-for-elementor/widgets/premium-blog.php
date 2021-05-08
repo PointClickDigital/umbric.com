@@ -23,6 +23,7 @@ use Elementor\Group_Control_Box_Shadow;
 use PremiumAddons\Includes\Premium_Template_Tags as Blog_Helper;
 use PremiumAddons\Includes\Helper_Functions;
 use PremiumAddons\Includes\Controls\Premium_Post_Filter;
+use PremiumAddons\Includes\Controls\Premium_Tax_Filter;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // If this file is called directly, abort.
@@ -1081,15 +1082,10 @@ class Premium_Blog extends Widget_Base {
 		$this->add_control(
 			'filter_tabs_type',
 			array(
-				'label'       => __( 'Get Tabs From', 'premium-addons-for-elementor' ),
-				'type'        => Controls_Manager::SELECT,
-				'default'     => 'category',
-				'label_block' => true,
-				'options'     => array(
-					'category' => __( 'Categories', 'premium-addons-for-elementor' ),
-					'tag'      => __( 'Tags', 'premium-addons-for-elementor' ),
-				),
-				'condition'   => array(
+				'label'     => __( 'Get Tabs From', 'premium-addons-for-elementor' ),
+				'type'      => Premium_Tax_Filter::TYPE,
+				'default'   => 'category',
+				'condition' => array(
 					'premium_blog_cat_tabs'  => 'yes',
 					'premium_blog_carousel!' => 'yes',
 				),

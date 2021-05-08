@@ -6108,9 +6108,10 @@ ul.premium-person-social-list {
   transition: all 0.3s ease-in-out; }
 
 .premium-image-scroll-section {
+  position: relative;
   overflow: hidden;
   width: 100%;
-  position: relative; }
+  -webkit-mask-image: -webkit-radial-gradient(white, black); }
 
 .premium-image-scroll-container {
   width: 100%; }

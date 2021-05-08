@@ -48,14 +48,14 @@ jQuery(window).on("elementor/frontend/init", function () {
 
                 map.markers = [];
                 // add markers
-                markers.each(function () {
-                    add_marker(jQuery(this), map, autoOpen, hoverOpen, hoverClose);
+                markers.each(function (index) {
+                    add_marker(jQuery(this), map, autoOpen, hoverOpen, hoverClose, index);
                 });
 
                 return map;
             }
 
-            function add_marker(pin, map, autoOpen, hoverOpen, hoverClose) {
+            function add_marker(pin, map, autoOpen, hoverOpen, hoverClose, zIndex) {
                 var latlng = new google.maps.LatLng(
                     pin.attr("data-lat"),
                     pin.attr("data-lng")
@@ -84,7 +84,8 @@ jQuery(window).on("elementor/frontend/init", function () {
                 var marker = new google.maps.Marker({
                     position: latlng,
                     map: map,
-                    icon: icon
+                    icon: icon,
+                    zIndex: zIndex
                 });
 
 

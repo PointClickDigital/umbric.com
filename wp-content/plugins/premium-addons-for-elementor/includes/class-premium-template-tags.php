@@ -65,6 +65,7 @@ class Premium_Template_Tags {
 		add_action( 'wp_ajax_nopriv_pa_get_posts', array( $this, 'get_posts_query' ) );
 
 		add_action( 'wp_ajax_premium_update_filter', array( $this, 'get_posts_list' ) );
+		add_action( 'wp_ajax_premium_update_tax', array( $this, 'get_related_tax' ) );
 	}
 
 	/**
@@ -281,6 +282,40 @@ class Premium_Template_Tags {
 	}
 
 	/**
+	 * Get related taxonomy list
+	 *
+	 * Get related taxonomy list array
+	 *
+	 * @since 4.3.1
+	 * @access public
+	 */
+	public static function get_related_tax() {
+
+		check_ajax_referer( 'pa-blog-widget-nonce', 'nonce' );
+
+		$post_type = isset( $_POST['post_type'] ) ? sanitize_text_field( wp_unslash( $_POST['post_type'] ) ) : '';
+
+		if ( empty( $post_type ) ) {
+			wp_send_json_error( __( 'Empty Post Type.', 'premium-addons-for-elementor' ) );
+		}
+
+		$taxonomy = self::get_taxnomies( $post_type );
+
+		$related_tax = array();
+
+		if ( ! empty( $taxonomy ) ) {
+
+			foreach ( $taxonomy as $index => $tax ) {
+				$related_tax[ $index ] = $tax->label;
+			}
+		}
+
+		wp_send_json_success( wp_json_encode( $related_tax ) );
+
+	}
+
+
+	/**
 	 * Get posts list
 	 *
 	 * Used to set Premium_Post_Filter control default settings.
@@ -421,10 +456,13 @@ class Premium_Template_Tags {
 				$filter_type = 'post_tag';
 			}
 
-			$post_args['tax_query'][0]['taxonomy'] = $filter_type;
-			$post_args['tax_query'][0]['field']    = 'slug';
-			$post_args['tax_query'][0]['terms']    = $settings['active_cat'];
-			$post_args['tax_query'][0]['operator'] = 'IN';
+			$post_args['tax_query'][] = array(
+				'taxonomy' => $filter_type,
+				'field'    => 'slug',
+				'terms'    => $settings['active_cat'],
+				'operator' => 'IN',
+			);
+
 		}
 
 		if ( 0 < $settings['premium_blog_offset'] ) {
@@ -589,6 +627,7 @@ class Premium_Template_Tags {
 	 * @param string $active_cat active category.
 	 */
 	public function set_widget_settings( $settings, $active_cat = '' ) {
+
 		$settings['active_cat'] = $active_cat;
 		self::$settings         = $settings;
 	}
@@ -819,6 +858,8 @@ class Premium_Template_Tags {
 		$wrap_key = sprintf( '%s_wrap', $key );
 
 		$content_key = sprintf( '%s_content', $key );
+
+		$post_type = $settings['post_type_filter'];
 
 		$this->add_render_attribute(
 			$tax_key,

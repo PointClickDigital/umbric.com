@@ -582,7 +582,7 @@ class Addons_Integration {
 	}
 
 	/**
-	 * Registers Premium Select Control.
+	 * Registers Premium Addons Custom Controls.
 	 *
 	 * @since 4.2.5
 	 * @access public
@@ -591,18 +591,21 @@ class Addons_Integration {
 	 */
 	public function init_pa_controls() {
 
-		// Include Control files.
+		// Include Controls' files.
 		require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-select.php';
 		require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-post-filter.php';
+		require_once PREMIUM_ADDONS_PATH . 'includes/controls/premium-tax-filter.php';
 
 		// Register controls.
 		$premium_select      = __NAMESPACE__ . '\Controls\Premium_Select';
 		$premium_post_filter = __NAMESPACE__ . '\Controls\Premium_Post_Filter';
+		$premium_tax_filter  = __NAMESPACE__ . '\Controls\Premium_Tax_Filter';
 
 		$control_manager = \Elementor\Plugin::instance();
 
 		$control_manager->controls_manager->register_control( $premium_select::TYPE, new $premium_select() );
 		$control_manager->controls_manager->register_control( $premium_post_filter::TYPE, new $premium_post_filter() );
+		$control_manager->controls_manager->register_control( $premium_tax_filter::TYPE, new $premium_tax_filter() );
 
 	}
 
