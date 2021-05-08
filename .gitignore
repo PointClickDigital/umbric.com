@@ -1,0 +1,13 @@
+wp-config.php
+/wp-admin/
+/wp-includes/
+wp-content/uploads/*
+wp-content/cache/*
+wp-content/backup/*
+wp-content/upgrade/*
+wp-content/debug.log
+/mail.umbric.com/
+sitemap.*
+
+# Include these files in previously blocked directories
+!wp-content/uploads/.htaccess
